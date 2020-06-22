@@ -4,7 +4,7 @@
       "title": "Imports/Setup",
       "text": "\r\n// imports\r\nimport com.datastax.spark.connector._;\r\n\r\n// Setup cass catalog, to map it to what type of catalog it is NOTE does not error if written incorrectly\r\nspark.conf.set(s\"spark.sql.catalog.cass100\", \"com.datastax.spark.connector.datasource.CassandraCatalog\")\r\nspark.conf.set(s\"spark.sql.catalog.cass100.spark.cassandra.connection.host\", \"127.0.0.1\")\r\n\r\n// check what catalogs we have\r\nval catalog \u003d spark.catalog\r\nprintln(catalog)\r\ncatalog.listDatabases().select(\"*\").show()\r\n\r\n",
       "user": "anonymous",
-      "dateUpdated": "2020-06-21 11:54:18.528",
+      "dateUpdated": "2020-06-22 05:00:29.378",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -16,7 +16,7 @@
         "colWidth": 6.0,
         "editorMode": "ace/mode/scala",
         "fontSize": 9.0,
-        "editorHide": true,
+        "editorHide": false,
         "title": true,
         "results": {},
         "enabled": true
@@ -128,9 +128,9 @@
     },
     {
       "title": "Split Description into individual words (without html or punctuation)",
-      "text": "// https://stackoverflow.com/a/45615779/6952495\n// or do udf like val removeHtml \u003d udf((data: String , rep : String)\u003d\u003edata.replaceAll(rep, \"\"))\n\n// use jsoup to remove html\nimport org.jsoup.Jsoup;\n\nval text \u003d Jsoup.parse(\"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003ehello\u003c/h1\u003e\u003cp\u003eworld\u003c/p\u003e\u003c/body\u003e\u003c/html\u003e\").text()\nprintln(text)\n\n// using udf so can take advantage of jsoup\nval removeHtml \u003d udf((description: String)\u003d\u003e if (description !\u003d null) Jsoup.parse(description).text() else null)\n// TODO don\u0027t do limit, but will switch to streaming probably so shouldn\u0027t be an issue\n// filtering out null descriptions, so doesn\u0027t break later transformations\nval descNoHtml \u003d df.select(\"episode_guid\", \"description\").filter($\"description\".isNotNull).withColumn(\"desc_no_html\", removeHtml($\"description\")).limit(1000)\n// z.show(descNoHtml)\n\n\n\n",
+      "text": "// https://stackoverflow.com/a/45615779/6952495\n// or do udf like val removeHtml \u003d udf((data: String , rep : String)\u003d\u003edata.replaceAll(rep, \"\"))\n\n// use jsoup to remove html\nimport org.jsoup.Jsoup;\n\nval text \u003d Jsoup.parse(\"\u003chtml\u003e\u003cbody\u003e\u003ch1\u003eJsoup\u003c/h1\u003e\u003cp\u003etest successful\u003c/p\u003e\u003c/body\u003e\u003c/html\u003e\").text()\nprintln(text)\n\n// using udf so can take advantage of jsoup\nval removeHtml \u003d udf((description: String)\u003d\u003e if (description !\u003d null) Jsoup.parse(description).text() else null)\n// TODO don\u0027t do limit, but will switch to streaming probably so shouldn\u0027t be an issue\n// filtering out null descriptions, so doesn\u0027t break later transformations\nval descNoHtml \u003d df.select(\"episode_guid\", \"description\").filter($\"description\".isNotNull).withColumn(\"desc_no_html\", removeHtml($\"description\")).limit(1000)\n// z.show(descNoHtml)\n\n\n\n",
       "user": "anonymous",
-      "dateUpdated": "2020-06-21 11:54:57.068",
+      "dateUpdated": "2020-06-22 01:03:18.852",
       "config": {
         "colWidth": 6.0,
         "fontSize": 9.0,
@@ -235,11 +235,11 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "hello world\nimport org.jsoup.Jsoup\n\u001b[1m\u001b[34mtext\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d hello world\n\u001b[1m\u001b[34mremoveHtml\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.expressions.UserDefinedFunction\u001b[0m \u003d UserDefinedFunction(\u003cfunction1\u003e,StringType,Some(List(StringType)))\n\u001b[1m\u001b[34mdescNoHtml\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [episode_guid: string, description: string ... 1 more field]\n"
+            "data": "Jsoup test succesful\norg.apache.spark.sql.AnalysisException: cannot resolve \u0027`episode_guid`\u0027 given input columns: [partition, offset, value, timestampType, key, timestamp, topic];;\n\u0027Project [\u0027episode_guid, \u0027description]\n+- StreamingRelationV2 org.apache.spark.sql.kafka010.KafkaSourceProvider@440b43cd, kafka, Map(subscribe -\u003e queue.podcast-analysis-tool.episode, kafka.bootstrap.servers -\u003e 127.0.0.1:9042), [key#78, value#79, topic#80, partition#81, offset#82L, timestamp#83, timestampType#84], StreamingRelation DataSource(org.apache.spark.sql.SparkSession@24afa7b1,kafka,List(),None,List(),None,Map(subscribe -\u003e queue.podcast-analysis-tool.episode, kafka.bootstrap.servers -\u003e 127.0.0.1:9042),None), kafka, [key#71, value#72, topic#73, partition#74, offset#75L, timestamp#76, timestampType#77]\n\n  at org.apache.spark.sql.catalyst.analysis.package$AnalysisErrorAt.failAnalysis(package.scala:42)\n  at org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1$$anonfun$apply$3.applyOrElse(CheckAnalysis.scala:110)\n  at org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1$$anonfun$apply$3.applyOrElse(CheckAnalysis.scala:107)\n  at org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$transformUp$1.apply(TreeNode.scala:278)\n  at org.apache.spark.sql.catalyst.trees.TreeNode$$anonfun$transformUp$1.apply(TreeNode.scala:278)\n  at org.apache.spark.sql.catalyst.trees.CurrentOrigin$.withOrigin(TreeNode.scala:70)\n  at org.apache.spark.sql.catalyst.trees.TreeNode.transformUp(TreeNode.scala:277)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$transformExpressionsUp$1.apply(QueryPlan.scala:93)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$transformExpressionsUp$1.apply(QueryPlan.scala:93)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$1.apply(QueryPlan.scala:105)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$1.apply(QueryPlan.scala:105)\n  at org.apache.spark.sql.catalyst.trees.CurrentOrigin$.withOrigin(TreeNode.scala:70)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan.transformExpression$1(QueryPlan.scala:104)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan.org$apache$spark$sql$catalyst$plans$QueryPlan$$recursiveTransform$1(QueryPlan.scala:116)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$org$apache$spark$sql$catalyst$plans$QueryPlan$$recursiveTransform$1$2.apply(QueryPlan.scala:121)\n  at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:234)\n  at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:234)\n  at scala.collection.mutable.ResizableArray$class.foreach(ResizableArray.scala:59)\n  at scala.collection.mutable.ArrayBuffer.foreach(ArrayBuffer.scala:48)\n  at scala.collection.TraversableLike$class.map(TraversableLike.scala:234)\n  at scala.collection.AbstractTraversable.map(Traversable.scala:104)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan.org$apache$spark$sql$catalyst$plans$QueryPlan$$recursiveTransform$1(QueryPlan.scala:121)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan$$anonfun$2.apply(QueryPlan.scala:126)\n  at org.apache.spark.sql.catalyst.trees.TreeNode.mapProductIterator(TreeNode.scala:187)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan.mapExpressions(QueryPlan.scala:126)\n  at org.apache.spark.sql.catalyst.plans.QueryPlan.transformExpressionsUp(QueryPlan.scala:93)\n  at org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1.apply(CheckAnalysis.scala:107)\n  at org.apache.spark.sql.catalyst.analysis.CheckAnalysis$$anonfun$checkAnalysis$1.apply(CheckAnalysis.scala:85)\n  at org.apache.spark.sql.catalyst.trees.TreeNode.foreachUp(TreeNode.scala:127)\n  at org.apache.spark.sql.catalyst.analysis.CheckAnalysis$class.checkAnalysis(CheckAnalysis.scala:85)\n  at org.apache.spark.sql.catalyst.analysis.Analyzer.checkAnalysis(Analyzer.scala:95)\n  at org.apache.spark.sql.catalyst.analysis.Analyzer$$anonfun$executeAndCheck$1.apply(Analyzer.scala:108)\n  at org.apache.spark.sql.catalyst.analysis.Analyzer$$anonfun$executeAndCheck$1.apply(Analyzer.scala:105)\n  at org.apache.spark.sql.catalyst.plans.logical.AnalysisHelper$.markInAnalyzer(AnalysisHelper.scala:201)\n  at org.apache.spark.sql.catalyst.analysis.Analyzer.executeAndCheck(Analyzer.scala:105)\n  at org.apache.spark.sql.execution.QueryExecution.analyzed$lzycompute(QueryExecution.scala:57)\n  at org.apache.spark.sql.execution.QueryExecution.analyzed(QueryExecution.scala:55)\n  at org.apache.spark.sql.execution.QueryExecution.assertAnalyzed(QueryExecution.scala:47)\n  at org.apache.spark.sql.Dataset$.ofRows(Dataset.scala:79)\n  at org.apache.spark.sql.Dataset.org$apache$spark$sql$Dataset$$withPlan(Dataset.scala:3407)\n  at org.apache.spark.sql.Dataset.select(Dataset.scala:1335)\n  at org.apache.spark.sql.Dataset.select(Dataset.scala:1353)\n  ... 49 elided\n"
           }
         ]
       },
@@ -248,9 +248,9 @@
       "jobName": "paragraph_1592628187692_1918249913",
       "id": "paragraph_1592628187692_1918249913",
       "dateCreated": "2020-06-20 04:43:07.692",
-      "dateStarted": "2020-06-21 11:54:57.077",
-      "dateFinished": "2020-06-21 11:54:58.647",
-      "status": "FINISHED"
+      "dateStarted": "2020-06-22 01:03:05.370",
+      "dateFinished": "2020-06-22 01:03:06.470",
+      "status": "ERROR"
     },
     {
       "title": "Failed attempt at implementing Stanford\u0027s NLP lib. I think there\u0027s something different about Spark, when it runs, since worker jvms don\u0027t have access to same libs necessarily, so couldn\u0027t find the external lib from within the udf or something",

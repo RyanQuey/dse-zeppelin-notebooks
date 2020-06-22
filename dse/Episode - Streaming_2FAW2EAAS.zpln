@@ -1,0 +1,825 @@
+{
+  "paragraphs": [
+    {
+      "title": "Test Kafka connection",
+      "text": "import org.apache.zookeeper.ZooKeeper\n\nval zk \u003d new ZooKeeper(\"localhost:2181\", 10000, null)\nval ids \u003d zk.getChildren(\"/brokers/ids\", false);\nprint(ids)\n        // for (String id : ids) {\n        //     String brokerInfo \u003d new String(zk.getData(\"/brokers/ids/\" + id, false, null));\n        //     System.out.println(id + \": \" + brokerInfo);\n        // }",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:00.678",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[0]import org.apache.zookeeper.ZooKeeper\n\u001b[1m\u001b[34mzk\u001b[0m: \u001b[1m\u001b[32morg.apache.zookeeper.ZooKeeper\u001b[0m \u003d State:CONNECTED Timeout:10000 sessionid:0x1000073de910000 local:/127.0.0.1:39700 remoteserver:localhost/127.0.0.1:2181 lastZxid:173 xid:2 sent:2 recv:2 queuedpkts:0 pendingresp:0 queuedevents:0\n\u001b[1m\u001b[34mids\u001b[0m: \u001b[1m\u001b[32mjava.util.List[String]\u001b[0m \u003d [0]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592788932444_1622459932",
+      "id": "paragraph_1592788932444_1622459932",
+      "dateCreated": "2020-06-22 01:22:12.444",
+      "dateStarted": "2020-06-22 08:01:01.455",
+      "dateFinished": "2020-06-22 08:01:26.513",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Setup Kafka connector",
+      "text": "// import org.apache.kafka.clients.consumer.ConsumerRecord\r\n// import org.apache.kafka.common.serialization.StringDeserializer\r\n// import org.apache.spark.streaming.kafka010._\r\n// import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent\r\n// import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe\r\n\r\nval df \u003d spark\r\n  .readStream\r\n  .format(\"kafka\")\r\n  .option(\"kafka.bootstrap.servers\", \"127.0.0.1:9092\")\r\n  .option(\"subscribe\", \"queue.podcast-analysis-tool.episode\")\r\n  //.option(\"auto.offset.reset\", \"earliest\") // get from beginning\r\n  .option(\"startingOffsets\", \"earliest\") // get from beginning\r\n  .load()\r\n\r\ndf.printSchema\r\nval selectedDf \u003d df.selectExpr(\"CAST(key AS STRING)\", \"CAST(value AS STRING)\")\r\n  .as[(String, String)]",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:26.571",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "title": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "podcast_api_id": "string",
+                      "episodes_with_data_in_title": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-90"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": true
+                },
+                "pieChart": {},
+                "stackedAreaChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                },
+                "lineChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                }
+              },
+              "commonSetting": {},
+              "keys": [],
+              "groups": [],
+              "values": []
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- key: binary (nullable \u003d true)\n |-- value: binary (nullable \u003d true)\n |-- topic: string (nullable \u003d true)\n |-- partition: integer (nullable \u003d true)\n |-- offset: long (nullable \u003d true)\n |-- timestamp: timestamp (nullable \u003d true)\n |-- timestampType: integer (nullable \u003d true)\n\n\u001b[1m\u001b[34mdf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [key: binary, value: binary ... 5 more fields]\n\u001b[1m\u001b[34mselectedDf\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[(String, String)]\u001b[0m \u003d [key: string, value: string]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_-2097966856",
+      "id": "paragraph_1592279670491_598632135",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:01:26.583",
+      "dateFinished": "2020-06-22 08:01:33.173",
+      "status": "FINISHED"
+    },
+    {
+      "text": "//df.select(\"value\", \"timestamp\") // doesn\u0027t do anything yet, not even putting on a new df yet\n//val wordCounts \u003d df.groupBy(\"value\").count() // want something so I can do outputMode(\"complete\")",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:33.193",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592786168579_1872622630",
+      "id": "paragraph_1592786168579_1872622630",
+      "dateCreated": "2020-06-22 00:36:08.579",
+      "dateStarted": "2020-06-22 08:01:33.219",
+      "dateFinished": "2020-06-22 08:01:33.974",
+      "status": "FINISHED"
+    },
+    {
+      "text": "import org.apache.spark.sql.streaming.ProcessingTime\r\n\r\n\r\n// Spark docs: \"The output is stored in memory as an in-memory table. Both, Append and Complete output modes, are supported. This should be used for debugging purposes on low data volumes as the entire output is collected and stored in the driver’s memory. Hence, use it with caution.\"\"\r\n\r\n\r\nval query \u003d selectedDf.writeStream\r\n  .outputMode(\"append\")\r\n  .format(\"memory\") // can\u0027t do to console or will jam up Zeppelin\r\n  .queryName(\"in_memory_table\") // for querying this stream \r\n  //.trigger(ProcessingTime(\"3 seconds\"))\r\n  .start()\r\n\r\n// DON\"T DO THIS will just block everything\r\n// https://stackoverflow.com/a/47487443/6952495\r\n// query.awaitTermination()",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:34.014",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.streaming.ProcessingTime\n\u001b[1m\u001b[34mquery\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.streaming.StreamingQuery\u001b[0m \u003d org.apache.spark.sql.execution.streaming.StreamingQueryWrapper@2a41ab4c\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592785993898_-297962884",
+      "id": "paragraph_1592785993898_-297962884",
+      "dateCreated": "2020-06-22 00:33:13.898",
+      "dateStarted": "2020-06-22 08:01:34.042",
+      "dateFinished": "2020-06-22 08:01:37.289",
+      "status": "FINISHED"
+    },
+    {
+      "text": "// for when I want to stop it real quick and debug\n// query.stop()",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:37.323",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592788714388_1289769342",
+      "id": "paragraph_1592788714388_1289769342",
+      "dateCreated": "2020-06-22 01:18:34.389",
+      "dateStarted": "2020-06-22 08:01:37.349",
+      "dateFinished": "2020-06-22 08:01:37.905",
+      "status": "FINISHED"
+    },
+    {
+      "text": "spark.table(\"in_memory_table\").show()",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:06:48.192",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "value": "string",
+                      "count": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "key",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "value",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+---+-----+\n|key|value|\n+---+-----+\n+---+-----+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592784940030_-1523799184",
+      "id": "paragraph_1592784940030_-1523799184",
+      "dateCreated": "2020-06-22 00:15:40.031",
+      "dateStarted": "2020-06-22 08:06:48.201",
+      "dateFinished": "2020-06-22 08:06:48.618",
+      "status": "FINISHED"
+    },
+    {
+      "text": "import kafkaHelpers.serializers.EpisodeDeserializer\n\n// test to make sure we can get classes from my jar like this\nnew EpisodeDeserializer()",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:42.655",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import kafkaHelpers.serializers.EpisodeDeserializer\n\u001b[1m\u001b[34mres7\u001b[0m: \u001b[1m\u001b[32mkafkaHelpers.serializers.EpisodeDeserializer\u001b[0m \u003d kafkaHelpers.serializers.EpisodeDeserializer@e7d239a\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592741961505_-1440408955",
+      "id": "paragraph_1592741961505_-1440408955",
+      "dateCreated": "2020-06-21 12:19:21.505",
+      "dateStarted": "2020-06-22 08:01:42.666",
+      "dateFinished": "2020-06-22 08:01:43.176",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Query using data sets",
+      "text": "val df2 \u003d spark\r\n  .read\r\n  .format(\"org.apache.spark.sql.cassandra\")\r\n  .options(Map( \"table\" -\u003e \"episodes_by_podcast\", \"keyspace\" -\u003e \"podcast_analysis_tool\"))\r\n  .load()\r\ndf2.registerTempTable(\"episodes\")\r\ndf2.printSchema",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:43.261",
+      "config": {
+        "lineNumbers": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 6.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[33mwarning: \u001b[0mthere was one deprecation warning; re-run with -deprecation for details\nroot\n |-- podcast_api: string (nullable \u003d false)\n |-- podcast_api_id: string (nullable \u003d false)\n |-- episode_guid: string (nullable \u003d false)\n |-- author: string (nullable \u003d true)\n |-- closed_captioned: boolean (nullable \u003d true)\n |-- comments: string (nullable \u003d true)\n |-- content: string (nullable \u003d true)\n |-- description: string (nullable \u003d true)\n |-- duration: string (nullable \u003d true)\n |-- episode_num: integer (nullable \u003d true)\n |-- episode_type: string (nullable \u003d true)\n |-- episode_updated_date: date (nullable \u003d true)\n |-- episode_url: string (nullable \u003d true)\n |-- explicit: boolean (nullable \u003d true)\n |-- image_url: string (nullable \u003d true)\n |-- keywords: array (nullable \u003d true)\n |    |-- element: string (containsNull \u003d true)\n |-- order_num: integer (nullable \u003d true)\n |-- podcast_website_url: string (nullable \u003d true)\n |-- published_date: date (nullable \u003d true)\n |-- season_num: integer (nullable \u003d true)\n |-- solr_query: string (nullable \u003d true)\n |-- subtitle: string (nullable \u003d true)\n |-- summary: string (nullable \u003d true)\n |-- title: string (nullable \u003d true)\n |-- updated_at: timestamp (nullable \u003d true)\n\n\u001b[1m\u001b[34mdf2\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [podcast_api: string, podcast_api_id: string ... 23 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_-472308476",
+      "id": "paragraph_1592284377987_-2010806212",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:01:43.279",
+      "dateFinished": "2020-06-22 08:01:45.651",
+      "status": "FINISHED"
+    },
+    {
+      "text": "import org.apache.spark.sql.Row;\nval flattened \u003d df2.select(\"episode_guid\", \"keywords\").withColumn(\"exploded\", explode($\"keywords\"))\nflattened.registerTempTable(\"flattened\")\nflattened.show\n// z.show(flattened)",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:45.669",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": true,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "podcast_api": "string",
+                      "podcast_api_id": "string",
+                      "episode_guid": "string",
+                      "author": "string",
+                      "closed_captioned": "string",
+                      "comments": "string",
+                      "content": "string",
+                      "description": "string",
+                      "duration": "string",
+                      "episode_num": "string",
+                      "episode_type": "string",
+                      "episode_updated_date": "string",
+                      "episode_url": "string",
+                      "explicit": "string",
+                      "image_url": "string",
+                      "keywords": "string",
+                      "order_num": "string",
+                      "podcast_website_url": "string",
+                      "published_date": "string",
+                      "season_num": "string",
+                      "solr_query": "string",
+                      "subtitle": "string",
+                      "summary": "string",
+                      "title": "string",
+                      "updated_at": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "keywords",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "exploded",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[33mwarning: \u001b[0mthere was one deprecation warning; re-run with -deprecation for details\n+--------------------+--------------------+------------+\n|        episode_guid|            keywords|    exploded|\n+--------------------+--------------------+------------+\n|0fd7b41e6373e9559...|[acountant, bookk...|   acountant|\n|0fd7b41e6373e9559...|[acountant, bookk...|  bookkeeper|\n|0fd7b41e6373e9559...|[acountant, bookk...|       cloud|\n|10237574ff21b194c...|[cloud, productiv...|       cloud|\n|10237574ff21b194c...|[cloud, productiv...|productivity|\n|10237574ff21b194c...|[cloud, productiv...|  technology|\n|1f746c220a2dfa2d7...|[accounting, prod...|  accounting|\n|1f746c220a2dfa2d7...|[accounting, prod...|productivity|\n|1f746c220a2dfa2d7...|[accounting, prod...|  technology|\n|87df2126cb674f57a...|   [bi, power, xero]|          bi|\n|87df2126cb674f57a...|   [bi, power, xero]|       power|\n|87df2126cb674f57a...|   [bi, power, xero]|        xero|\n|f956ab4ab4f626e11...|[bookkeeper, smsf...|  bookkeeper|\n|f956ab4ab4f626e11...|[bookkeeper, smsf...|        smsf|\n|f956ab4ab4f626e11...|[bookkeeper, smsf...|         ato|\n|f956ab4ab4f626e11...|[bookkeeper, smsf...|        asic|\n|f956ab4ab4f626e11...|[bookkeeper, smsf...|  accounting|\n|https://ibzrecord...|[ibiza, music, cl...|       ibiza|\n|https://ibzrecord...|[ibiza, music, cl...|       music|\n|https://ibzrecord...|[ibiza, music, cl...|        club|\n+--------------------+--------------------+------------+\nonly showing top 20 rows\n\nimport org.apache.spark.sql.Row\n\u001b[1m\u001b[34mflattened\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [episode_guid: string, keywords: array\u003cstring\u003e ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_146566057",
+      "id": "paragraph_1592400979133_398852147",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:01:45.678",
+      "dateFinished": "2020-06-22 08:01:53.051",
+      "status": "FINISHED"
+    },
+    {
+      "title": "distinct keywords in all episodes",
+      "text": "\nflattened.select(approx_count_distinct(\"exploded\")).show",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:01:53.083",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true,
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------------------------------+\n|approx_count_distinct(exploded)|\n+-------------------------------+\n|                          46002|\n+-------------------------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_990102207",
+      "id": "paragraph_1592403481279_-481744812",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:01:53.103",
+      "dateFinished": "2020-06-22 08:02:04.059",
+      "status": "FINISHED"
+    },
+    {
+      "text": "val sortedKeywords \u003d flattened.groupBy(\"exploded\").count()\n  .filter($\"count\" \u003e\u003d 20)\n  .orderBy(desc(\"count\"))\n  .limit(100)\n  \n  sortedKeywords.show()",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:02:04.115",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------------+-----+\n|     exploded|count|\n+-------------+-----+\n|      podcast| 1598|\n|         data| 1521|\n|   technology| 1435|\n|           ai|  987|\n|     business|  966|\n|        cloud|  955|\n|        Intel|  846|\n|      science|  842|\n|encouragement|  808|\n| christianity|  804|\n|         news|  795|\n|  devotionals|  793|\n|    educators|  787|\n| intelligence|  783|\n|       prayer|  781|\n|     software|  778|\n|      machine|  773|\n|  development|  746|\n|     learning|  738|\n|       school|  729|\n+-------------+-----+\nonly showing top 20 rows\n\n\u001b[1m\u001b[34msortedKeywords\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [exploded: string, count: bigint]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_-1899520321",
+      "id": "paragraph_1592404517386_1681569567",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:02:04.143",
+      "dateFinished": "2020-06-22 08:02:13.708",
+      "status": "FINISHED"
+    },
+    {
+      "text": "z.show(sortedKeywords)",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:02:13.740",
+      "config": {
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "fontSize": 9.0,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "exploded": "string",
+                      "count": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                },
+                "stackedAreaChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default",
+                  "style": "stream"
+                },
+                "lineChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "exploded",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "count",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "exploded\tcount\npodcast\t1598\ndata\t1521\ntechnology\t1435\nai\t987\nbusiness\t966\ncloud\t955\nIntel\t846\nscience\t842\nencouragement\t808\nchristianity\t804\nnews\t795\ndevotionals\t793\neducators\t787\nintelligence\t783\nprayer\t781\nsoftware\t778\nmachine\t773\n development\t746\nlearning\t738\nschool\t729\nscripture\t727\ntech\t725\n software\t629\n programming\t617\nFootball\t612\nmarketing\t595\n technology\t588\nCloud\t575\nradio\t542\ndevops\t534\nfootball\t526\nsecurity\t516\nartificial\t509\ngreen bay packers\t495\nmilwaukee\t493\n devops\t490\nreview\t486\nnfl\t485\nmovie\t472\npackers\t469\nstar\t465\nwars\t460\nluke\t459\nwomen in tech\t456\ngoogle\t451\nforce\t448\njedi\t447\npilot\t444\nfandom\t442\nthe\t437\nhan\t435\ndarth\t434\ncomputing\t429\nclone\t429\nprequel\t426\nsolo\t425\n tech\t422\nNFL\t417\nskywalker\t416\n espree devora\t413\nsci\t409\nData\t408\nsith\t403\n\u003c![CDATA[ESPN Milwaukee\t401\nfiloni\t398\n open source\t397\ngreen bay\t396\ndevelopment\t395\nengineering\t395\nSoftware\t384\nmedia\t375\n AI\t373\nwisconsin\t373\n artificial intelligence\t372\nSPORTS\t369\nSharePoint\t361\n podcast\t355\nazure\t355\nin\t351\nrobot\t351\nscifi\t344\nIT\t342\nrebels\t339\nBest\t337\nrebel\t335\nGreen Bay packers\t334\ndatacenter\t332\nPodcast\t331\n SQL\t325\nVoiceAmerica\t324\nvoice\t323\nlucas\t321\ninternet\t320\n PowerShell\t319\nseo\t318\nWisconsin\t315\ndisney\t312\nfuturism\t312\nPractices\t311\nIntelligent\t311\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_1646414792",
+      "id": "paragraph_1592404685301_-1380225598",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:02:13.769",
+      "dateFinished": "2020-06-22 08:02:19.027",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%sql\nselect exploded as keyword, count(exploded) as total_episodes_with_keyword from flattened group by exploded order by total_episodes_with_keyword DESC;\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-22 08:02:19.057",
+      "config": {
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "colWidth": 10.0,
+        "editorMode": "ace/mode/sql",
+        "fontSize": 9.0,
+        "editorHide": false,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 458.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "keyword": "string",
+                      "total_episodes_with_keyword": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": false
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "keyword",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "total_episodes_with_keyword",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "keyword\ttotal_episodes_with_keyword\npodcast\t1598\ndata\t1521\ntechnology\t1435\nai\t987\nbusiness\t966\ncloud\t955\nIntel\t846\nscience\t842\nencouragement\t808\nchristianity\t804\nnews\t795\ndevotionals\t793\neducators\t787\nintelligence\t783\nprayer\t781\nsoftware\t778\nmachine\t773\n development\t746\nlearning\t738\nschool\t729\nscripture\t727\ntech\t725\n software\t629\n programming\t617\nFootball\t612\nmarketing\t595\n technology\t588\nCloud\t575\nradio\t542\ndevops\t534\nfootball\t526\nsecurity\t516\nartificial\t509\ngreen bay packers\t495\nmilwaukee\t493\n devops\t490\nreview\t486\nnfl\t485\nmovie\t472\npackers\t469\nstar\t465\nwars\t460\nluke\t459\nwomen in tech\t456\ngoogle\t451\nforce\t448\njedi\t447\npilot\t444\nfandom\t442\nthe\t437\nhan\t435\ndarth\t434\nclone\t429\ncomputing\t429\nprequel\t426\nsolo\t425\n tech\t422\nNFL\t417\nskywalker\t416\n espree devora\t413\nsci\t409\nData\t408\nsith\t403\n\u003c![CDATA[ESPN Milwaukee\t401\nfiloni\t398\n open source\t397\ngreen bay\t396\ndevelopment\t395\nengineering\t395\nSoftware\t384\nmedia\t375\nwisconsin\t373\n AI\t373\n artificial intelligence\t372\nSPORTS\t369\nSharePoint\t361\nazure\t355\n podcast\t355\nin\t351\nrobot\t351\nscifi\t344\nIT\t342\nrebels\t339\nBest\t337\nrebel\t335\nGreen Bay packers\t334\ndatacenter\t332\nPodcast\t331\n SQL\t325\nVoiceAmerica\t324\nvoice\t323\nlucas\t321\ninternet\t320\n PowerShell\t319\nseo\t318\nWisconsin\t315\ndisney\t312\nfuturism\t312\nPractices\t311\nIntelligent\t311\nstarwars\t308\ncomedy\t308\nvader\t307\ninformation\t307\nyoda\t302\ntrilogy\t302\nMeltdown\t300\nPicture\t300\nMotion\t300\nroast\t300\nMPM\t300\ntranshumanism\t299\nrobotics\t291\nlinear\t288\nmovies\t287\nand\t287\nml\t286\n Kubernetes\t285\nAI\t284\ndigressions\t283\nsearch\t283\ndigitalmarketing\t272\ngambling\t272\nsingularity\t271\nfinance\t271\none\t269\ncyborg\t268\nwayne\t263\nmanagement\t262\nnanotechnology\t261\nkylo\t261\ngenetics\t261\nGreen Bay\t261\nprincess\t261\n aws\t260\nawakens\t259\nTED\t257\n cloud\t257\nsalesforce\t255\norganic\t255\nsearchengineoptimization\t254\nvoiceovers\t254\nvoices of search\t254\nmike\t253\nsynbio\t253\nwindows\t252\ncybersecurity\t251\nComputing\t251\nTechnology\t248\nsearchmetrics\t247\nhenderson\t246\n Azure\t245\nrey\t245\nSDN\t245\ncelebration\t244\nren\t244\nBIM\t242\n agile\t241\naws\t239\nDefined\t238\nInfrastructure\t237\nSDI\t237\ncenter\t237\nmusic\t236\nagile\t234\n computer science\t234\n containers\t233\nsportsbetting\t232\ntalk\t230\n web\t226\nprogramming\t224\nmicrosoft\t219\ndigital\t217\nCenter\t216\nKang\t215\ndigest\t215\nTae\t215\n강태욱\t215\nWook\t215\n machine learning\t212\n amazon\t210\ncontent\t209\nrogue\t208\n bharara\t208\n software development\t208\nWWE\t207\nchangelog\t206\n ai\t206\n law\t206\nGreen Bay Packers\t205\nhealth\t205\n Jason Wilde\t204\n Andrew Brandt\t204\nThe Business of Sports with Andrew Brandt\t204\n preet\t203\nof\t203\ntwiml\t203\nConversations\t203\n ESPN\t201\n startups\t200\n Bryan Dee\t200\n\u003c![CDATA[ESPN Madison\t200\n\u003c![CDATA[ACC\t200\n Wes Durham\t200\n Mark Packer]]\u003e\t200\n Dan Needles]]\u003e\t198\n last week in aws\t198\n Greg Scalzo]]\u003e\t197\ndeveloper\t195\nNetworking\t195\nyork\t193\nresearch\t192\narchive\t191\nfacebook\t189\nenterprise\t189\nInformation\t187\ntalk4media\t187\nstreaming\t184\n news\t184\nPackers\t184\nfinn\t184\nwan\t183\n servers\t183\n Mark Tauscher]]\u003e\t183\nto\t183\n software engineering\t183\nmaul\t180\n docker\t178\nStorage\t178\ntoys\t178\ndata science\t177\n nba]]\u003e\t177\n kubernetes\t176\n data\t175\ntalk4radio\t175\n\u003c![CDATA[espn\t174\n Technology\t174\nMicrosoft\t174\n rachel nichols\t173\n the jump\t173\nsansweet\t173\n Office 365\t172\n Legal\t172\nMilwaukee\t172\nconference\t171\n data science\t171\nby\t171\n government\t171\nSearchmetrics\t169\nentrepreneurship\t169\npodcasting\t168\ninterview\t167\n New\t167\ncollecting\t166\nSports\t166\nhealthcare\t165\nDell\t164\nsocial\t163\nMovies\t161\namazon\t161\nfuture\t160\ntha\t158\nComics\t157\ntesting\t157\nlinux\t155\ninsurance\t154\ntheshow\t153\nclojure\t153\ndatomic\t153\n sourcecast\t152\nbad\t152\nDevOps\t151\niot\t151\nComedy\t151\n DevOps\t149\nsystems\t149\nsyndication\t149\nbig\t148\nlast\t148\nCarolina\t147\nNorth\t147\nNerd\t147\n AWS\t147\nWinston\t147\ncollection\t147\nthat\t147\nNC\t147\nGeek\t147\nstartups\t147\nSalem\t147\nempire\t147\nGreensboro\t147\nstorage\t146\n admin\t146\ndeep\t146\nCompute\t146\nyeah\t144\ncomplete\t144\nsales\t144\nits\t144\n intelligence\t143\nculture\t143\nhacking\t143\ndynatrace\t142\ndesign\t142\n politics\t142\n online\t142\nBusiness\t141\n episode\t140\nhow\t139\ntwitter\t139\n dcuo\t139\ntrexlight\t139\n universe\t139\n dc\t139\nSPorts\t138\nModeling\t138\nBuilding\t138\nassistant\t138\nAEC\t138\n artificial\t138\n superpatriot\t137\ndevsecops\t137\nentrepreneur\t137\nCenters\t137\ndoctor\t137\nmedicine\t136\n rails\t136\nlife\t136\nvideos\t136\nSplunk\t136\n love\t136\nSplunk Cloud\t135\n executive\t135\nmedical\t135\nbfmbusiness\t134\n ruby on rails\t134\nwith\t133\ntechnologie\t133\nkubernetes\t133\nruby\t133\n railscast\t133\npureperformance\t133\nactor\t133\n science\t132\nstrategy\t132\neconomie\t132\nhightech\t132\nEMC\t131\n architecture\t131\nHPC\t130\ncopyright\t130\nitunes\t130\nXeon\t130\n nfl\t130\nProcessors\t130\napplicationsecurityweekly\t129\nmobile\t129\n hacking\t129\ncorporate\t128\n developers\t128\n code\t128\n Data Science\t127\napplication\t127\nBuchek\t126\nTice\t126\nthisagilelife\t126\nJason\t126\narchitecture\t126\nSextro\t126\nMcCauley\t126\nCraig\t126\nJohn\t126\nLee\t126\nAmos\t126\nKing\t126\nNate\t126\nMcKie\t126\neducation\t125\nmachine learning\t124\ndocker\t124\n Germany\t124\n HPI\t123\n Potsdam\t123\nGoogle\t123\ntele-TASK\t123\ncoding\t123\nsports\t123\n cloud native\t123\nautomation\t123\n packers\t122\nreturn\t122\n Istio\t121\nentertainment\t121\n Business\t121\n deep learning\t121\neu\t121\n Docker\t120\n security\t119\nblogging\t118\nOracle\t118\n justice\t118\n Big Data\t117\nbrand\t116\nreal\t116\ninnovation\t116\n change log\t115\n k8s\t115\n hacker\t115\napplepodcasts\t115\nfor\t114\nengagement\t114\nsuccess\t114\ngo\t114\nsebastiencouasnon\t113\nfunny\t113\npodcaster\t113\nhistory\t113\ntechandco\t113\nTNA\t113\n service mesh\t113\nempowerment\t113\npipemanradio\t112\n dating\t112\n Cloud Services\t112\ndigginwithseven\t112\nestate\t112\ndeankpiper\t112\nart\t112\ntheadventuresofpipeman\t112\npowerofpipeman\t112\nthepipeman\t112\nROH\t112\n chat\t111\ntalkradio\t111\n cloud-native\t111\ncelebrities\t111\nbusinessradio\t111\n IBM\t111\n Machine Learning\t111\nminipodcasts\t111\nkasdan\t110\ninternetradio\t110\nbrewers\t110\ncare\t109\nbeer\t109\n Human Capital Management\t109\npatterns\t109\n Best Practices\t109\n ML\t108\nsem\t108\nsciences\t108\n Cloud HCM\t108\n Fusion HCM\t107\nproviders\t107\nsaas\t107\n IT\t107\nIMPACT\t107\n community management\t106\ncreative\t106\nmigration\t106\nPublic\t106\nhospital\t105\nm\t105\nintertainment\t105\nfatboy\t105\nweb\t105\ndoctors\t105\npipemanradiotour\t105\n networks\t105\nedge\t105\nWRESTLING\t105\n computers\t104\n Podcast\t104\nServers\t104\n web development\t104\nfiction\t104\nprovider\t103\n deep\t103\nSoundae\t102\nscale\t102\nSAP\t102\n leadership\t102\nsoundcloud\t102\nlightning\t102\n golang\t102\n learning\t102\ntreatment\t102\nweekend preview\t101\nPrivate\t101\ntools\t101\nCHIKARA\t101\nBuilders\t100\ncyber\t100\nvikings\t100\nhospitals\t100\n HCM Cloud\t99\naccounting\t99\n books\t99\napex\t99\n comedy\t99\ntelecom\t98\n computer vision\t98\nProgramming\t97\nPWG\t97\ncto\t97\n startup\t97\nnp\t96\non\t96\n machine\t96\n fitness\t95\ncommunity\t95\nhacker\t95\n management\t95\nsupercontest\t94\n neural networks\t94\n awful\t94\nresistance\t94\n Containers\t93\ncloudsecurity\t92\nservices\t92\nembedded\t92\nSOA\t92\nchange\t92\nScripting\t92\nLanguages\t92\nMDA\t92\nconcurrency\t92\nMDSD\t92\nEthernet\t91\n Windows Phone\t91\n sysadmin\t91\nout\t91\nbucks\t90\nappsec\t90\n RMD\t90\nReachMD\t90\n GI Insights\t90\naicpa\t90\nadventure\t90\nleadership\t89\n radio\t89\n Gastroenterology and Hepatology\t89\n publishing\t89\nIoT\t88\n python\t88\nsociety\t87\ncoronavirus\t87\npolitics\t87\nNWA\t87\nvulnerabilities\t87\nsavage\t87\ntelevision\t86\nit\t86\n Tech\t86\n sharepoint\t85\nGREEN BAY PACKERS\t85\nonline\t85\napplicationsecurity\t85\nMarketing\t85\nfan\t85\ngalaxy\t84\nlegal\t84\ntiwwh\t84\ntodd\t84\nAzure\t84\ncima\t84\n Making Data Simple\t84\nBig\t84\ngoldman\t83\nalexa\t83\na\t83\n funny\t82\ngovernance\t82\n01businessforum\t82\n engineering\t82\nmr\t82\nsolutions\t82\nanime\t81\nProgramming Throwdown\t81\ngames\t80\nplatform\t80\nData Security and Privacy with the Privacy Professor\t80\ngreen\t80\n Politics\t80\ntravel\t80\nRebecca Herold\t80\nrational\t80\ngcp\t79\nfringe\t79\n CI/CD\t79\n rational\t79\nleanpub\t79\nconfluent\t79\nthreats\t79\ncode\t79\ntraining\t78\n klindt\t78\nilm\t78\nVideo\t78\nAl Martin\t78\ncompression\t78\nBonnie D. Graham\t78\nOOAD\t77\npython\t77\ngovernment\t77\nstart\t77\nMinnesota Vikings\t77\nfsociety\t77\nself\t77\nelliot\t77\ncyberpunk\t77\nObject\t77\n training\t77\nseason\t76\ndiscovery\t76\nhome\t76\nnew\t76\nsex\t76\n Appleton\t76\nbigdata\t76\nNFL MLB NBA NHL NCAA SPORTS\t76\n Programming Language\t75\nasw\t75\n community\t75\ntennesseejeff\t75\nboard\t75\ngoogleplay\t75\nvideo\t75\nrelationships\t74\nValue\t74\nmachines\t74\nAudio\t74\nIsilon\t74\nbadgers\t73\nprofessor\t73\n PowerApps\t73\nWCW\t73\n Symmetric Nets\t72\n Réseaux de Petri Symétriques\t72\n Symmetric nets with bags\t72\nComputer Science\t72\n Symbolic techniques\t72\n football\t72\napplications\t72\n Modélisation formelle\t72\n Petri nets\t72\n Formal modeling\t72\n Réseaux de Petri\t72\n Informatique\t72\nstartup\t72\n Open Source\t72\nmarvel\t71\ndocument\t71\nhouse\t71\nbaseball\t71\nScience\t71\n engineering leadership\t70\ngame\t70\ndrones\t70\nanalytics\t70\nmlb\t70\n peter bell\t70\nPresented by SAP\t70\nbusch\t69\nQuantum Business Insights\t69\njason\t69\n Los Angeles\t69\nburton\t69\n Geary\t69\n design\t69\n Global Health\t69\nUCD\t69\nOlivia Parr-Rud\t69\nhold\t68\n Mark Pesce\t68\nbay\t68\nexploits\t68\n business\t68\nprivacy\t68\nContent\t68\nspotify\t68\n chatbot\t68\n Ansible\t68\nediscovery\t68\nThe Next Billion Seconds\t68\ncasino\t68\n exercise\t68\n nutrition\t67\ninvestiga\t67\n Wisconsin\t67\ne\t67\nslots\t67\n alexa\t67\n JUSTICE\t67\n2019\t67\napple\t66\n bot\t66\nstory\t66\nslot\t66\n Cloud\t66\n 90 day race\t66\npersonal\t66\nNational\t66\nuniversity\t65\n Amazon\t65\nECW\t65\nperfmatters\t65\n leader\t65\ncomedian\t65\nairbnb\t64\nhttpmediavoiceoverscom\t64\n bears\t64\n Artificial Intelligence\t64\n discussion\t64\nEpisodes\t64\nWWF\t64\npop\t64\nfitness\t64\n voice assistant\t63\n family\t63\nshort\t63\n linux\t63\nServer\t63\nblockchain\t63\n google assistant\t63\n 90 day run\t62\nCBA\t62\n nerium\t62\nthirtysevenclick\t62\nBrandt\t62\n Social Media\t62\nAndrew\t62\nRadio\t62\n therapy\t62\nrental\t62\nproduction\t62\n Solar\t62\njon\t62\n devlife\t62\n moustachette\t62\nContract\t62\nwriting\t62\n jeff olson\t62\nCollective Bargain\t62\nHardware\t62\nvacation\t62\n administrative\t62\nNFLPA\t62\nPWS\t61\nterm\t61\naudio\t61\nprosthetics\t61\n network marketing pro\t61\n nageotte\t61\ndeep learning\t61\n macabre\t61\n paul\t61\n eric worre\t61\nsage\t61\n klinke\t61\n tobin\t61\nrelease engineering\t60\ndestiny\t60\ncovid19\t60\nFoundation\t60\nEnomaly\t60\n releng\t60\narbitrage\t60\n electronics\t60\n 90 day transformation\t60\njwre\t60\nhappiness\t60\nniche\t60\n #\u0026lt;Ta...\t60\njulian\t60\njavascript\t60\n Descarga cultura\t60\n 90 day challenge\t60\nwill\t60\n build engineering\t60\nnetworking\t60\nbell\t60\n gitops\t60\nbooks\t59\ncmo\t59\nmy\t59\n gay\t59\n container images\t59\ncontainers\t59\naction\t59\nat\t59\ndan\t59\n orchestration\t59\n2009\t59\nnetwork\t59\nanna\t59\n Movies\t59\nbook\t59\npublishing\t58\n cloud computing\t58\n didyouknow\t58\napp\t58\nRoofing\t58\n Advertising\t58\nbackup\t58\ndreams\t58\nfear\t58\nyour\t58\n javascript\t58\n women empowerment\t58\n Lawyer Liz\t58\n Contractor\t58\ningrammicro\t58\n friendship\t57\nMINNESOTA VIKINGS\t57\n self help\t57\n self love\t57\n hi-tech\t57\npackers talk\t57\n minority women empowerment\t57\nworld\t57\ntech news\t57\nmattalderman\t57\n self reflection\t57\nrealtor\t57\nStartup Focus with Game-Changers\t57\nFuture of Business with Game Changers\t57\n developer\t57\npolicy\t57\n self esteem\t57\n relationships\t57\nFink\t56\nAdvanced\t56\nlist\t56\nParty\t56\n interesting\t56\nZenith\t56\nEmily\t56\nTACC\t56\nangry\t56\nHutson\t56\ntransformation\t56\nNSF\t56\nopensource\t56\nAlexis\t56\n career\t56\nSupercomputing\t56\ncomicbooks\t56\nFood\t56\nvirtual\t56\ncohosting\t56\nTexas\t56\nmikeshema\t55\nkeithhoodlet\t55\n Red Hat\t55\nDayton\t55\nOhio\t55\n azure\t55\nrant\t55\nPool\t55\n Drew Hahn\t55\nbig data\t55\nvoicefirst\t55\nJunk\t55\nDinner\t55\nartificialintelligence\t55\n vagrant\t55\nRevit\t54\n SaaS\t54\nAPI\t54\nworkflow\t54\nAwful\t54\njobs\t54\ndigitaltransformation\t54\ncompliance\t54\njohnkinsella\t54\nenergy\t53\n bungie\t53\n lions\t53\nfringecasting\t53\n guardian radio\t53\nmetaldetecting\t53\nfantasy\t53\nlost\t53\n infrastructure\t53\noptimization\t53\n streaming\t53\n ladypod\t53\n destiny radio\t53\nPulse of the Pack\t53\n FAI\t53\nhope\t53\n AIML\t53\nmeditation\t52\nSHINING\t52\nserverless\t52\n education\t52\nwork\t52\nbears\t52\nperfbytes\t52\nexploration\t52\nagents\t52\ncomputer science\t52\nNJPW\t52\npacker\t52\n sql\t52\n powershell\t52\n burrows\t52\nhuman\t52\ncareer\t52\nethics\t52\n Security\t51\nproject\t51\n brendon burchard\t51\n interviews\t51\n Automation\t51\n팟티\t51\nhr\t51\nobjectives\t51\n Music\t51\namtrak\t51\nfanfic\t51\nAWS\t51\n microservices\t51\n ghost\t51\nopen source\t51\nmindfulness\t51\ntake\t51\n los angeles\t51\nenlightenment\t51\ncrowdfunding\t51\n robotics\t51\npost\t51\nvicarious\t51\namtrekker\t51\nIBM\t51\n big data\t51\namtrakker\t51\nackbar\t50\nAJPW\t50\n growth\t50\n romance\t50\nrunning\t50\n nfc north\t50\n orrin woodward\t50\nsecrets\t50\nmanaged\t50\n34\t50\nspace\t50\nMLB\t50\nmoney\t50\nWIZARD\t50\napps\t50\nnonduality\t49\n django\t49\nartists\t49\nengineering management\t49\n  espree devora\t49\n365\t49\nrule\t49\n applications\t49\n VMware\t49\n Game Changers Radio\t49\nsoftware management\t49\ncard\t49\nstartup hiring\t49\nsoftware startup teams\t49\n healthcare\t49\ntranscoding\t49\npaul\t49\nengineering hiring\t49\n nfc\t49\nsoftware startups\t49\n real-time\t48\n Facebook\t48\n lgbt\t48\n bigfooty\t48\nfemale\t48\nartificial intelligence\t48\n dating advice\t48\ndevelopers\t48\n ghosting\t48\ninfrastructure\t48\n fifty first ghosts\t48\nKI\t48\n robot\t48\n dating apps\t48\n ffg]]\u003e\t48\nword\t48\n lesbian\t48\n breakup\t48\nMAM\t48\northotics\t47\ndr. rollan roberts\t47\nscary\t47\nfsbo\t47\nrecovery\t47\nengineer\t47\n automation\t47\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"result-alert alert-warning\" role\u003d\"alert\"\u003e\u003cbutton type\u003d\"button\" class\u003d\"close\" data-dismiss\u003d\"alert\" aria-label\u003d\"Close\"\u003e\u003cspan aria-hidden\u003d\"true\"\u003e\u0026times;\u003c/span\u003e\u003c/button\u003e\u003cstrong\u003eOutput is truncated\u003c/strong\u003e to 1000 rows. Learn more about \u003cstrong\u003ezeppelin.spark.maxResult\u003c/strong\u003e\u003c/div\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592739709083_-1084200416",
+      "id": "paragraph_1592403838712_1648679832",
+      "dateCreated": "2020-06-21 11:41:49.083",
+      "dateStarted": "2020-06-22 08:02:19.070",
+      "dateFinished": "2020-06-22 08:02:24.693",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "Episode - Streaming",
+  "id": "2FAW2EAAS",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview1",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {
+    "isRunning": false
+  }
+}

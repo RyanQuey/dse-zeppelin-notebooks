@@ -1,0 +1,450 @@
+{
+  "paragraphs": [
+    {
+      "title": "Imports/Setup",
+      "text": "// imports\r\nimport com.datastax.spark.connector._;\r\n\r\n// Setup cass catalog, to map it to what type of catalog it is NOTE does not error if written incorrectly\r\nspark.conf.set(s\"spark.sql.catalog.cass100\", \"com.datastax.spark.connector.datasource.CassandraCatalog\")\r\nspark.conf.set(s\"spark.sql.catalog.cass100.spark.cassandra.connection.host\", \"127.0.0.1\")\r\n\r\n// check what catalogs we have\r\nval catalog \u003d spark.catalog\r\ncatalog.listDatabases().select(\"*\").show()\r\n\r\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 06:30:08.754",
+      "config": {
+        "colWidth": 6.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+--------------------+--------------------+\n|                name|         description|         locationUri|\n+--------------------+--------------------+--------------------+\n|             default|Default Hive data...|dsefs://127.0.0.1...|\n|            dse_perf|                    |dsefs:/user/spark...|\n|          killrvideo|                    |dsefs:/user/spark...|\n|podcast_analysis_...|                    |dsefs:/user/spark...|\n|      system_backups|                    |dsefs:/user/spark...|\n|system_virtual_sc...|                    |dsefs:/user/spark...|\n+--------------------+--------------------+--------------------+\n\nimport com.datastax.spark.connector._\n\u001b[1m\u001b[34mcatalog\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.catalog.Catalog\u001b[0m \u003d org.apache.spark.sql.internal.CatalogImpl@2aaab066\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592280193243_-1318880554",
+      "id": "paragraph_1592280193243_-1318880554",
+      "dateCreated": "2020-06-16 04:03:13.243",
+      "dateStarted": "2020-06-16 04:57:47.559",
+      "dateFinished": "2020-06-16 04:57:48.864",
+      "status": "FINISHED"
+    },
+    {
+      "text": "catalog.listTables(\"podcast_analysis_tool\").select(\"*\").show()",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 06:30:13.870",
+      "config": {
+        "colWidth": 6.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": false,
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+--------------------+--------------------+-----------+---------+-----------+\n|                name|            database|description|tableType|isTemporary|\n+--------------------+--------------------+-----------+---------+-----------+\n| episodes_by_podcast|podcast_analysis_...|       null| EXTERNAL|      false|\n|podcasts_by_language|podcast_analysis_...|       null| EXTERNAL|      false|\n|search_queries_by...|podcast_analysis_...|       null| EXTERNAL|      false|\n|search_results_by...|podcast_analysis_...|       null| EXTERNAL|      false|\n+--------------------+--------------------+-----------+---------+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592280628976_935021875",
+      "id": "paragraph_1592280628976_935021875",
+      "dateCreated": "2020-06-16 04:10:28.976",
+      "dateStarted": "2020-06-16 04:42:08.935",
+      "dateFinished": "2020-06-16 04:42:14.318",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Query using spark sql",
+      "text": "spark.sql(\"SELECT term, search_type, podcast_count FROM podcast_analysis_tool.search_queries_by_term limit 5\").show()\r\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 06:28:39.759",
+      "config": {
+        "colWidth": 6.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+------------+---------------+-------------+\n|        term|    search_type|podcast_count|\n+------------+---------------+-------------+\n|apache storm|            all|            0|\n|apache storm|     artistTerm|            0|\n|apache storm|descriptionTerm|            0|\n|apache storm|   keywordsTerm|            0|\n|apache storm|      titleTerm|            0|\n+------------+---------------+-------------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592280949861_-935607239",
+      "id": "paragraph_1592280949861_-935607239",
+      "dateCreated": "2020-06-16 04:15:49.861",
+      "dateStarted": "2020-06-16 06:28:34.500",
+      "dateFinished": "2020-06-16 06:28:35.433",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Query using spark context (deprecated) and cassandraTable",
+      "text": "\r\nval rows \u003d sc.cassandraTable(\"podcast_analysis_tool\", \"search_queries_by_term\").select(\"term\", \"search_type\").where(\"term \u003d \u0027cassandra\u0027\").collect\r\n//.where(\"color \u003d ?\", \"black\").toArray.foreach(println)\r\nfor (row \u003c- rows) \r\n    println(row.getString(\"term\"), row.getString(\"search_type\"))\r\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 06:28:59.484",
+      "config": {
+        "colWidth": 6.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "(cassandra,all)\n(cassandra,artistTerm)\n(cassandra,descriptionTerm)\n(cassandra,keywordsTerm)\n(cassandra,titleTerm)\n\u001b[1m\u001b[34mrows\u001b[0m: \u001b[1m\u001b[32mArray[com.datastax.spark.connector.CassandraRow]\u001b[0m \u003d Array(CassandraRow{term: cassandra, search_type: all}, CassandraRow{term: cassandra, search_type: artistTerm}, CassandraRow{term: cassandra, search_type: descriptionTerm}, CassandraRow{term: cassandra, search_type: keywordsTerm}, CassandraRow{term: cassandra, search_type: titleTerm})\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592282572468_-1530433781",
+      "id": "paragraph_1592282572468_-1530433781",
+      "dateCreated": "2020-06-16 04:42:52.468",
+      "dateStarted": "2020-06-16 05:44:29.011",
+      "dateFinished": "2020-06-16 05:44:29.691",
+      "status": "FINISHED"
+    },
+    {
+      "title": "spark sql (which also opens up visualizations)",
+      "text": "%spark.sql\nSELECT term, search_type, podcast_count FROM podcast_analysis_tool.search_queries_by_term where podcast_count \u003e 0 limit 2000",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 07:54:29.531",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "multiBarChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "term": "string",
+                      "search_type": "string",
+                      "podcast_count": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                },
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-90"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": true
+                },
+                "pieChart": {},
+                "stackedAreaChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                },
+                "lineChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default"
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "search_type",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "term",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "podcast_count",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "sql",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/sql",
+        "title": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "term\tsearch_type\tpodcast_count\napache cassandra\tdescriptionTerm\t1\napache cassandra\tkeywordsTerm\t1\napache airflow\tdescriptionTerm\t1\napache airflow\tkeywordsTerm\t1\ndata warehouses\tall\t2\ndata warehouses\tdescriptionTerm\t9\ndata warehouses\tkeywordsTerm\t9\ndata warehouses\ttitleTerm\t2\nhashicorp\tall\t1\nhashicorp\tdescriptionTerm\t2\nhashicorp\tkeywordsTerm\t3\nhashicorp\ttitleTerm\t1\nhadoop\tall\t2\nhadoop\tartistTerm\t1\nhadoop\tdescriptionTerm\t7\nhadoop\tkeywordsTerm\t7\nhadoop\ttitleTerm\t1\nsoftware engineering\tall\t30\nsoftware engineering\tartistTerm\t12\nsoftware engineering\tdescriptionTerm\t159\nsoftware engineering\tkeywordsTerm\t162\nsoftware engineering\ttitleTerm\t29\ngoogle cloud platform\tall\t1\ngoogle cloud platform\tartistTerm\t1\ngoogle cloud platform\tdescriptionTerm\t27\ngoogle cloud platform\tkeywordsTerm\t27\ngoogle cloud platform\ttitleTerm\t1\ndata lakes\tall\t1\ndata lakes\tdescriptionTerm\t8\ndata lakes\tkeywordsTerm\t8\ndata lakes\ttitleTerm\t1\nhortonworks\tdescriptionTerm\t1\nhortonworks\tkeywordsTerm\t1\ndigital ocean\tdescriptionTerm\t17\ndigital ocean\tkeywordsTerm\t20\nbackend engineering\tall\t1\nbackend engineering\tdescriptionTerm\t4\nbackend engineering\tkeywordsTerm\t4\nbackend engineering\ttitleTerm\t1\nhadoop infrastructure\tdescriptionTerm\t1\nhadoop infrastructure\tkeywordsTerm\t1\ndata engineering\tall\t3\ndata engineering\tartistTerm\t1\ndata engineering\tdescriptionTerm\t105\ndata engineering\tkeywordsTerm\t109\ndata engineering\ttitleTerm\t3\ncloud services\tall\t7\ncloud services\tdescriptionTerm\t129\ncloud services\tkeywordsTerm\t134\ncloud services\ttitleTerm\t4\nmapreduce\tdescriptionTerm\t4\nmapreduce\tkeywordsTerm\t4\napache kafka\tall\t1\napache kafka\tartistTerm\t1\napache kafka\tdescriptionTerm\t1\napache kafka\tkeywordsTerm\t1\napache kafka\ttitleTerm\t1\ndistributed systems\tall\t1\ndistributed systems\tdescriptionTerm\t61\ndistributed systems\tkeywordsTerm\t62\ndistributed systems\ttitleTerm\t1\ndevops\tall\t48\ndevops\tartistTerm\t6\ndevops\tdescriptionTerm\t162\ndevops\tkeywordsTerm\t170\ndevops\ttitleTerm\t47\nmicroservices\tdescriptionTerm\t8\nmicroservices\tkeywordsTerm\t8\nmicrosoft azure\tdescriptionTerm\t49\nmicrosoft azure\tkeywordsTerm\t57\nmicrosoft azure\ttitleTerm\t5\nstreaming architecture\tdescriptionTerm\t5\nstreaming architecture\tkeywordsTerm\t5\nfull stack development\tall\t2\nfull stack development\tdescriptionTerm\t27\nfull stack development\tkeywordsTerm\t30\nfull stack development\ttitleTerm\t1\nartificial intelligence\tall\t37\nartificial intelligence\tartistTerm\t3\nartificial intelligence\tdescriptionTerm\t184\nartificial intelligence\tkeywordsTerm\t184\nartificial intelligence\ttitleTerm\t35\ndatastax\tall\t3\ndatastax\tartistTerm\t3\ndatastax\tdescriptionTerm\t2\ndatastax\tkeywordsTerm\t3\navro\tall\t2\navro\tartistTerm\t2\navro\tdescriptionTerm\t6\navro\tkeywordsTerm\t8\nairflow\tall\t1\nairflow\tdescriptionTerm\t2\nairflow\tkeywordsTerm\t2\nairflow\ttitleTerm\t1\ndocker\tall\t8\ndocker\tartistTerm\t2\ndocker\tdescriptionTerm\t23\ndocker\tkeywordsTerm\t26\ndocker\ttitleTerm\t6\nnew relic\tall\t1\nnew relic\tartistTerm\t1\nnew relic\tdescriptionTerm\t7\nnew relic\tkeywordsTerm\t8\nnew relic\ttitleTerm\t1\nzookeeper\tall\t4\nzookeeper\tartistTerm\t2\nzookeeper\tdescriptionTerm\t8\nzookeeper\tkeywordsTerm\t11\nzookeeper\ttitleTerm\t4\nprosthetics\tall\t1\nprosthetics\tdescriptionTerm\t21\nprosthetics\tkeywordsTerm\t21\nprosthetics\ttitleTerm\t1\nconfluent\tall\t1\nconfluent\tartistTerm\t1\nconfluent\tdescriptionTerm\t2\nconfluent\tkeywordsTerm\t2\nconfluent\ttitleTerm\t1\nbig data\tall\t38\nbig data\tartistTerm\t6\nbig data\tdescriptionTerm\t187\nbig data\tkeywordsTerm\t184\nbig data\ttitleTerm\t34\nlucene\tall\t1\nlucene\tartistTerm\t1\nlucene\tdescriptionTerm\t1\nlucene\tkeywordsTerm\t1\nkubernetes\tall\t2\nkubernetes\tdescriptionTerm\t28\nkubernetes\tkeywordsTerm\t28\nkubernetes\ttitleTerm\t2\nspark data\tdescriptionTerm\t8\nspark data\tkeywordsTerm\t8\ncloudera\tall\t1\ncloudera\tartistTerm\t1\ncloudera\tdescriptionTerm\t2\ncloudera\tkeywordsTerm\t2\ncloudera\ttitleTerm\t1\ndistributed file systems\tdescriptionTerm\t1\ndistributed file systems\tkeywordsTerm\t1\ndata science\tall\t47\ndata science\tkeywordsTerm\t163\ndata science\ttitleTerm\t44\nmachine learning\tall\t42\nmachine learning\tartistTerm\t3\nmachine learning\tdescriptionTerm\t188\nmachine learning\tkeywordsTerm\t191\nmachine learning\ttitleTerm\t41\nkafka\tall\t16\nkafka\tartistTerm\t4\nkafka\tdescriptionTerm\t28\nkafka\tkeywordsTerm\t35\nkafka\ttitleTerm\t13\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592279670491_598632135",
+      "id": "paragraph_1592279670491_598632135",
+      "dateCreated": "2020-06-16 03:54:30.491",
+      "dateStarted": "2020-06-16 06:33:40.958",
+      "dateFinished": "2020-06-16 06:33:41.474",
+      "status": "FINISHED"
+    },
+    {
+      "title": "Query using dataframes (NOTE actually a data set)",
+      "text": "val ds \u003d spark\r\n  .read\r\n  .format(\"org.apache.spark.sql.cassandra\")\r\n  .options(Map( \"table\" -\u003e \"episodes_by_podcast\", \"keyspace\" -\u003e \"podcast_analysis_tool\"))\r\n  .load()\r\nds.registerTempTable(\"episodes\")",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 07:05:08.919",
+      "config": {
+        "colWidth": 6.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "lineNumbers": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[33mwarning: \u001b[0mthere was one deprecation warning; re-run with -deprecation for details\n\u001b[1m\u001b[34mds\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [podcast_api: string, podcast_api_id: string ... 23 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592284377987_-2010806212",
+      "id": "paragraph_1592284377987_-2010806212",
+      "dateCreated": "2020-06-16 05:12:57.987",
+      "dateStarted": "2020-06-16 07:05:08.923",
+      "dateFinished": "2020-06-16 07:05:09.556",
+      "status": "FINISHED"
+    },
+    {
+      "title": "SQL on TEMP TABLE",
+      "text": "%sql\r\n /* now that we have registered a temporary table on a data set, we can run sql on it within spark */\r\n \r\n SELECT * FROM episodes limit 1;",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-16 07:05:11.799",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "multiBarChart": {
+                  "rotate": {
+                    "degree": "-45"
+                  },
+                  "xLabelStatus": "default",
+                  "stacked": false
+                },
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "podcast_api": "string",
+                      "podcast_api_id": "string",
+                      "episode_guid": "string",
+                      "author": "string",
+                      "closed_captioned": "string",
+                      "comments": "string",
+                      "content": "string",
+                      "description": "string",
+                      "duration": "string",
+                      "episode_num": "string",
+                      "episode_type": "string",
+                      "episode_updated_date": "string",
+                      "episode_url": "string",
+                      "explicit": "string",
+                      "image_url": "string",
+                      "keywords": "string",
+                      "order_num": "string",
+                      "podcast_website_url": "string",
+                      "published_date": "string",
+                      "season_num": "string",
+                      "solr_query": "string",
+                      "subtitle": "string",
+                      "summary": "string",
+                      "title": "string",
+                      "updated_at": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "keys": [
+                {
+                  "name": "count(1)",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [],
+              "commonSetting": {}
+            }
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "title": true,
+        "tableHide": false,
+        "editorHide": false,
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "podcast_api\tpodcast_api_id\tepisode_guid\tauthor\tclosed_captioned\tcomments\tcontent\tdescription\tduration\tepisode_num\tepisode_type\tepisode_updated_date\tepisode_url\texplicit\timage_url\tkeywords\torder_num\tpodcast_website_url\tpublished_date\tseason_num\tsolr_query\tsubtitle\tsummary\ttitle\tupdated_at\nitunes\t1230807136\thttp://softwaredaily.wpengine.com/?p\u003d1258\tMachine Learning – Software Engineering Daily\tfalse\tnull\t\u003cp\u003e\u003cimg data-attachment-id\u003d\"1261\" data-permalink\u003d\"https://softwareengineeringdaily.com/2015/11/17/machine-learning-and-technical-debt-with-d-sculley/d-sculley/\" data-orig-file\u003d\"https://i2.wp.com/softwareengineeringdaily.com/wp-content/uploads/2015/11/d-sculley.jpg?fit\u003d175%2C175\u0026#38;ssl\u003d1\" data-orig-size\u003d\"175,175\" data-comments-opened\u003d\"0\" data-image-meta\u003d\"{\u0026#34;aperture\u0026#34;:\u0026#34;0\u0026#34;,\u0026#34;credit\u0026#34;:\u0026#34;Picasa 3.0\u0026#34;,\u0026#34;camera\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;caption\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;created_timestamp\u0026#34;:\u0026#34;0\u0026#34;,\u0026#34;copyright\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;focal_length\u0026#34;:\u0026#34;0\u0026#34;,\u0026#34;iso\u0026#34;:\u0026#34;0\u0026#34;,\u0026#34;shutter_speed\u0026#34;:\u0026#34;0\u0026#34;,\u0026#34;title\u0026#34;:\u0026#34;\u0026#34;,\u0026#34;orientation\u0026#34;:\u0026#34;1\u0026#34;}\" data-image-title\u003d\"d-sculley\" data-image-description\u003d\"\" data-medium-file\u003d\"https://i2.wp.com/softwareengineeringdaily.com/wp-content/uploads/2015/11/d-sculley.jpg?fit\u003d175%2C175\u0026#38;ssl\u003d1\" data-large-file\u003d\"https://i2.wp.com/softwareengineeringdaily.com/wp-content/uploads/2015/11/d-sculley.jpg?fit\u003d175%2C175\u0026#38;ssl\u003d1\" class\u003d\"alignright size-full wp-image-1261\" style\u003d\"border-radius: 50%; border: 1px solid #000000;\" src\u003d\"https://i1.wp.com/softwaredaily.wpengine.com/wp-content/uploads/2015/11/d-sculley.jpg?resize\u003d175%2C175\" alt\u003d\"d-sculley\" width\u003d\"175\" height\u003d\"175\" srcset\u003d\"https://i2.wp.com/softwareengineeringdaily.com/wp-content/uploads/2015/11/d-sculley.jpg?w\u003d175\u0026#38;ssl\u003d1 175w, https://i2.wp.com/softwareengineeringdaily.com/wp-content/uploads/2015/11/d-sculley.jpg?resize\u003d150%2C150\u0026#38;ssl\u003d1 150w, https://i2.wp.com/softwareengineeringdaily.com/wp-content/uploads/2015/11/d-sculley.jpg?resize\u003d80%2C80\u0026#38;ssl\u003d1 80w\" sizes\u003d\"(max-width: 175px) 100vw, 175px\" data-recalc-dims\u003d\"1\" /\u003e\u003c/p\u003e \u003ch3\u003e“Changing anything changes everything.”\u003c/h3\u003e \u003cp\u003eTechnical debt, referring to the compounding cost of changes to software architecture, can be especially challenging in machine learning systems.\u003c/p\u003e \u003cp\u003eD. Sculley is a software engineer at Google, focusing on machine learning, data mining, and information retrieval. He recently co-authored the paper \u003ca href\u003d\"http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/43146.pdf\"\u003eMachine Learning: The High Interest Credit Card of Technical Debt\u003c/a\u003e.\u003c/p\u003e \u003ch3\u003eQuestions\u003c/h3\u003e \u003cul\u003e \u003cli\u003eHow do you define technical debt?\u003c/li\u003e \u003cli\u003eWhy does technical debt tend to compound like financial debt?\u003c/li\u003e \u003cli\u003eIs machine learning the marriage of hard-coded software logic and constantly changing external data?\u003c/li\u003e \u003cli\u003eWhat types of anti-patterns should be avoided by machine learning engineers?\u003c/li\u003e \u003cli\u003eWhat is a decision threshold in a machine learning system?\u003c/li\u003e \u003cli\u003eWhat advice would you give to organizations that are building their prototypes and product systems in different languages?\u003c/li\u003e \u003c/ul\u003e \u003ch3\u003eLinks\u003c/h3\u003e \u003cul\u003e \u003cli\u003e\u003ca href\u003d\"http://martinfowler.com/bliki/TechnicalDebt.html\"\u003eTechnical Debt\u003c/a\u003e\u003c/li\u003e \u003cli\u003e\u003ca href\u003d\"https://en.wikipedia.org/wiki/Adapter_pattern\"\u003eAdapter pattern and glue code\u003c/a\u003e\u003c/li\u003e \u003cli\u003e\u003ca href\u003d\"http://research.google.com/pubs/author38217.html\"\u003eD\u0026#8217;s research page\u003c/a\u003e\u003c/li\u003e \u003c/ul\u003e \u003ch3\u003eSponsors\u003c/h3\u003e \u003cp\u003e\u003ca href\u003d\"http://www.hired.com/softwareengineeringdaily\"\u003eHired.com\u003c/a\u003e is the job marketplace for software engineers. Go to \u003ca href\u003d\"http://www.hired.com/softwareengineeringdaily\"\u003ehired.com/softwareengineeringdaily\u003c/a\u003e to get a \u003cstrong\u003e$600 bonus\u003c/strong\u003e upon landing a job through Hired.\u003c/p\u003e \u003cp\u003e\u003ca href\u003d\"https://www.digitalocean.com/?utm_medium\u003dpodcasts\u0026#38;utm_source\u003dsedaily\u0026#38;utm_campaign\u003dsedaily\"\u003eDigital Ocean\u003c/a\u003e is the simplest cloud hosting provider. Use promo code SEDAILY for $10 in free credit.\u003c/p\u003e \u003cp\u003e\u003ca href\u003d\"https://www.digitalocean.com/?utm_medium\u003dpodcasts\u0026#38;utm_source\u003dsedaily\u0026#38;utm_campaign\u003dsedaily\"\u003e\u003cimg class\u003d\"alignnone aligncenter\" src\u003d\"https://i0.wp.com/m.cloudbrew.com/img/digitalOceanLogo.jpg?resize\u003d112%2C112\u0026#038;ssl\u003d1\" alt\u003d\"\" width\u003d\"112\" height\u003d\"112\" data-recalc-dims\u003d\"1\" /\u003e\u003c/a\u003e\u003c/p\u003e \u003cp\u003eThe post \u003ca rel\u003d\"nofollow\" href\u003d\"https://softwareengineeringdaily.com/2015/11/17/machine-learning-and-technical-debt-with-d-sculley/\"\u003eMachine Learning and Technical Debt with D. Sculley\u003c/a\u003e appeared first on \u003ca rel\u003d\"nofollow\" href\u003d\"https://softwareengineeringdaily.com\"\u003eSoftware Engineering Daily\u003c/a\u003e.\u003c/p\u003e \t\u003cblockquote\u003e\u003cp\u003e“Changing anything changes everything.”\u003c/p\u003e\u003c/blockquote\u003e \u003cp\u003eTechnical debt, referring to the compounding cost of changes to software architecture, can be especially challenging in machine learning systems.\u003c/p\u003e \u003cp\u003e\u003ca class\u003d\"continue-reading\" href\u003d\"http://softwaredaily.wpengine.com/2015/11/17/machine-learning-and-technical-debt-with-d-sculley/\"\u003eContinue reading…\u003c/a\u003e\u003c/p\u003e \u003cp\u003eThe post \u003ca rel\u003d\"nofollow\" href\u003d\"https://softwareengineeringdaily.com/2015/11/17/machine-learning-and-technical-debt-with-d-sculley/\"\u003eMachine Learning and Technical Debt with D. Sculley\u003c/a\u003e appeared first on \u003ca rel\u003d\"nofollow\" href\u003d\"https://softwareengineeringdaily.com\"\u003eSoftware Engineering Daily\u003c/a\u003e.\u003c/p\u003e \t33m7s\tnull\tnull\tnull\thttps://softwareengineeringdaily.com/2015/11/17/machine-learning-and-technical-debt-with-d-sculley/?utm_source\u003drss\u0026utm_medium\u003drss\u0026utm_campaign\u003dmachine-learning-and-technical-debt-with-d-sculley\tfalse\tnull\tWrappedArray()\tnull\thttps://softwareengineeringdaily.com/category/machine-learning/\t2015-11-17\tnull\tnull\t“Changing anything changes everything.” - Technical debt, referring to the compounding cost of changes to software architecture, can be especially challenging in machine learning systems. - Continue reading…\t“Changing anything changes everything.”\u003cbr /\u003e \u003cbr /\u003e Technical debt, referring to the compounding cost of changes to software architecture, can be especially challenging in machine learning systems.\u003cbr /\u003e \u003cbr /\u003e Continue reading…\tnull\t2020-06-07 10:35:13.981\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1592290522986_931790370",
+      "id": "paragraph_1592290522986_931790370",
+      "dateCreated": "2020-06-16 06:55:22.986",
+      "dateStarted": "2020-06-16 07:05:11.808",
+      "dateFinished": "2020-06-16 07:05:12.582",
+      "status": "FINISHED"
+    }
+  ],
+  "name": "all-in-one",
+  "id": "2FC1ZQSR9",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview1",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {
+    "isRunning": false
+  }
+}
