@@ -1,0 +1,148 @@
+{
+  "paragraphs": [
+    {
+      "text": "%md\n### NOTE requires octave on your PATH. Make sure to run:\n`sudo apt-get -y install octave`",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-25 13:14:25.883",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003cdiv class\u003d\"markdown-body\"\u003e\n\u003ch3\u003eNOTE requires octave on your PATH. Make sure to run:\u003c/h3\u003e\n\u003cp\u003e\u003ccode\u003esudo apt-get -y install octave\u003c/code\u003e\u003c/p\u003e\n\n\u003c/div\u003e"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1593090848543_569888277",
+      "id": "paragraph_1593090848543_569888277",
+      "dateCreated": "2020-06-25 13:14:08.543",
+      "dateStarted": "2020-06-25 13:14:25.892",
+      "dateFinished": "2020-06-25 13:14:25.911",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%python\nimport oct2py\n\n# initial test to make sure our Octave/Oct2py dependencies are set up\n\noc \u003d oct2py.Oct2Py()\nx \u003d oc.zeros(3,3)\nprint(x, x.dtype)",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-25 13:14:37.873",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "[[0. 0. 0.]\n [0. 0. 0.]\n [0. 0. 0.]] float64\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1593090626026_-1950445151",
+      "id": "paragraph_1593090626026_-1950445151",
+      "dateCreated": "2020-06-25 13:10:26.026",
+      "dateStarted": "2020-06-25 13:14:37.879",
+      "dateFinished": "2020-06-25 13:14:39.218",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%python\nfrom scipy.io import loadmat\n\nloadmat(\"/home/ubuntu/sample-data/EMG-and-data-glove-dataset/S12_E1_A3.mat\")",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-25 13:25:54.214",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "python",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/python"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "{\u0027__header__\u0027: b\u0027MATLAB 5.0 MAT-file, Platform: PCWIN64, Created on: Fri Dec 07 01:35:01 2018\u0027, \u0027__version__\u0027: \u00271.0\u0027, \u0027__globals__\u0027: [], \u0027subject\u0027: array([[102]], dtype\u003duint8), \u0027exercise\u0027: array([[1]], dtype\u003duint8), \u0027emg\u0027: array([[-5.6030760e-08, -2.5569469e-07,  1.3899845e-06, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [-1.1617658e-06, -1.6036117e-06,  1.9385800e-06, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [-8.7323002e-07, -2.8233474e-06,  3.3613126e-06, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       ...,\n       [ 0.0000000e+00,  0.0000000e+00,  0.0000000e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [ 0.0000000e+00,  0.0000000e+00,  0.0000000e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [ 0.0000000e+00,  0.0000000e+00,  0.0000000e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00]], dtype\u003dfloat32), \u0027acc\u0027: array([[ 0.54463255,  0.18051942, -0.8753886 , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.54492205,  0.18066417, -0.87426686, ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.54521155,  0.1808089 , -0.87314504, ...,  0.        ,\n         0.        ,  0.        ],\n       ...,\n       [ 0.5024047 ,  0.18694232, -0.884306  , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.50244087,  0.1903784 , -0.8775424 , ...,  0.        ,\n         0.        ,  0.        ],\n       [ 0.50240576,  0.18996651, -0.8779046 , ...,  0.        ,\n         0.        ,  0.        ]], dtype\u003dfloat32), \u0027gyro\u0027: array([[-9.2366582e-01, -1.2285439e+00,  1.1585366e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [-9.1462821e-01, -1.2195063e+00,  1.1585366e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [-9.0559053e-01, -1.2104685e+00,  1.1585366e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       ...,\n       [ 4.5704079e+00,  9.3064785e-02,  7.1767855e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [ 4.4529724e+00,  6.1447546e-02,  7.1948524e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00],\n       [ 4.4868140e+00, -5.7643284e-03,  7.2663116e+00, ...,\n         0.0000000e+00,  0.0000000e+00,  0.0000000e+00]], dtype\u003dfloat32), \u0027mag\u0027: array([[   1.7722179,   13.942594 , -125.15741  , ...,    0.       ,\n           0.       ,    0.       ],\n       [   1.7499852,   13.950005 , -125.149994 , ...,    0.       ,\n           0.       ,    0.       ],\n       [   1.7277527,   13.957416 , -125.142586 , ...,    0.       ,\n           0.       ,    0.       ],\n       ...,\n       [   2.4      ,   14.7      , -127.9      , ...,    0.       ,\n           0.       ,    0.       ],\n       [   2.4      ,   14.7      , -127.9      , ...,    0.       ,\n           0.       ,    0.       ],\n       [   2.3708124,   14.72189  , -127.83433  , ...,    0.       ,\n           0.       ,    0.       ]], dtype\u003dfloat32), \u0027glove\u0027: array([[-21.781563  , -30.094036  ,  17.169827  , ...,  19.812881  ,\n         -0.98892516,  -0.22459945],\n       [-21.781563  , -30.094036  ,  17.169827  , ...,  19.812881  ,\n         -0.98892516,  -0.22459945],\n       [-21.781563  , -30.094036  ,  17.169827  , ...,  19.812881  ,\n         -0.98892516,  -0.22459945],\n       ...,\n       [ 18.151302  ,  -7.523509  ,  26.163546  , ..., -33.36906   ,\n        -12.361565  ,   1.5721962 ],\n       [ 18.151302  ,  -7.523509  ,  26.163546  , ..., -33.36906   ,\n        -12.361565  ,   1.5721962 ],\n       [ 18.151302  ,  -7.523509  ,  26.163546  , ..., -33.36906   ,\n        -12.361565  ,   1.5721962 ]], dtype\u003dfloat32), \u0027stimulus\u0027: array([[0],\n       [0],\n       [0],\n       ...,\n       [0],\n       [0],\n       [0]], dtype\u003dint8), \u0027repetition\u0027: array([[0],\n       [0],\n       [0],\n       ...,\n       [0],\n       [0],\n       [0]], dtype\u003dint8), \u0027restimulus\u0027: array([[0],\n       [0],\n       [0],\n       ...,\n       [0],\n       [0],\n       [0]], dtype\u003dint8), \u0027rerepetition\u0027: array([[1],\n       [1],\n       [1],\n       ...,\n       [0],\n       [0],\n       [0]], dtype\u003dint8)}\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1593090782839_295169540",
+      "id": "paragraph_1593090782839_295169540",
+      "dateCreated": "2020-06-25 13:13:02.839",
+      "dateStarted": "2020-06-25 13:25:54.222",
+      "dateFinished": "2020-06-25 13:25:56.286",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%python\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-06-25 13:24:12.916",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1593091452916_-273361678",
+      "id": "paragraph_1593091452916_-273361678",
+      "dateCreated": "2020-06-25 13:24:12.916",
+      "status": "READY"
+    }
+  ],
+  "name": "Matlab playground",
+  "id": "2FEAMZ4A6",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview1",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false
+  },
+  "info": {}
+}
