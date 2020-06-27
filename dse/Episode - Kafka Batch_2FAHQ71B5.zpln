@@ -236,9 +236,9 @@
       "status": "READY"
     },
     {
-      "text": "spark.table(\"in_memory_table\").show()",
+      "text": "// THINGS TO TRY:\n// 1) First, try rearranging the code so it\u0027s all in one section or something...I wonder if that\u0027s making the difference from teh spark shell\n// 2) if still doesn\u0027t work, go through and do the kafka as batch (this notebook)\n\nspark.table(\"in_memory_table\").show()",
       "user": "anonymous",
-      "dateUpdated": "2020-06-22 08:07:13.890",
+      "dateUpdated": "2020-06-22 08:33:42.328",
       "config": {
         "editorSetting": {
           "language": "scala",
@@ -321,7 +321,9 @@
       "jobName": "paragraph_1592813233890_-1092859834",
       "id": "paragraph_1592784940030_-1523799184",
       "dateCreated": "2020-06-22 08:07:13.890",
-      "status": "READY"
+      "dateStarted": "2020-06-22 08:21:27.704",
+      "dateFinished": "2020-06-22 08:21:28.028",
+      "status": "FINISHED"
     },
     {
       "text": "import kafkaHelpers.serializers.EpisodeDeserializer\n\n// test to make sure we can get classes from my jar like this\nnew EpisodeDeserializer()",
