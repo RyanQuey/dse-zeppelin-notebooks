@@ -4,7 +4,7 @@
       "title": "Imports/Setup",
       "text": "\r\n// imports\r\nimport com.datastax.spark.connector._;\r\n\r\n// Setup cass catalog, to map it to what type of catalog it is NOTE does not error if written incorrectly\r\nspark.conf.set(s\"spark.sql.catalog.cass100\", \"com.datastax.spark.connector.datasource.CassandraCatalog\")\r\nspark.conf.set(s\"spark.sql.catalog.cass100.spark.cassandra.connection.host\", \"127.0.0.1\")\r\n\r\n// check what catalogs we have\r\nval catalog \u003d spark.catalog\r\nprintln(catalog)\r\ncatalog.listDatabases().select(\"*\").show()\r\n\r\n",
       "user": "anonymous",
-      "dateUpdated": "2020-06-22 05:00:29.378",
+      "dateUpdated": "2020-07-03 07:21:14.944",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -26,11 +26,11 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "org.apache.spark.sql.internal.CatalogImpl@6e77292f\n+--------------------+--------------------+--------------------+\n|                name|         description|         locationUri|\n+--------------------+--------------------+--------------------+\n|             default|Default Hive data...|dsefs://127.0.0.1...|\n|            dse_perf|                    |dsefs:/user/spark...|\n|          killrvideo|                    |dsefs:/user/spark...|\n|podcast_analysis_...|                    |dsefs:/user/spark...|\n|      system_backups|                    |dsefs:/user/spark...|\n|system_virtual_sc...|                    |dsefs:/user/spark...|\n+--------------------+--------------------+--------------------+\n\nimport com.datastax.spark.connector._\n\u001b[1m\u001b[34mcatalog\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.catalog.Catalog\u001b[0m \u003d org.apache.spark.sql.internal.CatalogImpl@6e77292f\n"
+            "data": "java.lang.RuntimeException: Interpreter Setting \u0027spark\u0027 is not ready, its status is ERROR\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:415)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:74)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:172)\n\tat org.apache.zeppelin.scheduler.AbstractScheduler.runJob(AbstractScheduler.java:130)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:159)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n"
           }
         ]
       },
@@ -39,9 +39,9 @@
       "jobName": "paragraph_1592293632809_-79663144",
       "id": "paragraph_1592280193243_-1318880554",
       "dateCreated": "2020-06-16 07:47:12.809",
-      "dateStarted": "2020-06-21 11:54:19.215",
-      "dateFinished": "2020-06-21 11:54:54.047",
-      "status": "FINISHED"
+      "dateStarted": "2020-07-03 07:21:15.926",
+      "dateFinished": "2020-07-03 07:21:15.934",
+      "status": "ERROR"
     },
     {
       "text": "catalog.listTables(\"podcast_analysis_tool\").select(\"*\").show()",
@@ -616,5 +616,7 @@
   "config": {
     "isZeppelinNotebookCronEnable": false
   },
-  "info": {}
+  "info": {
+    "isRunning": true
+  }
 }

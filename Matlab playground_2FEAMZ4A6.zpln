@@ -1731,10 +1731,10 @@
       "status": "FINISHED"
     },
     {
-      "title": "Show readings 1-1500",
+      "title": "Show all readings  (in groups of 2000) ",
       "text": "%sql\nselect * from rounded_glove_sensor limit 2000",
       "user": "anonymous",
-      "dateUpdated": "2020-07-04 13:40:19.446",
+      "dateUpdated": "2020-07-04 13:44:10.005",
       "config": {
         "colWidth": 12.0,
         "fontSize": 9.0,
