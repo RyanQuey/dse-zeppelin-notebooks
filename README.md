@@ -1,6 +1,8 @@
 # dse-zeppelin-notebooks
 Zeppelin notebooks for use with Cassandra, Spark, and Kafka (particularly my podcast analysis tool)
 
+![screenshot](https://raw.githubusercontent.com/RyanQuey/dse-zeppelin-notebooks/master/spark-total-episodes-with-keywords-2.png)
+
 # Released under MIT License
 
 Copyright (c) 2020 Ryan Quey.
